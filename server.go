@@ -1,26 +1,42 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"encoding/json"
 	"log"
+	"fmt"
 )
 
 func handler(w http.ResponseWriter, r *http.Request){
 	
+	ContentType := "application/json"
+
+	if r.Header.Get("Content-Type") != ContentType {
+		w.WriteHeader(404)
+		return	
+	}
+
+	if r.Method != "GET" {
+		w.WriteHeader(404)
+		return
+	}
+
 	type Response struct {
 		Message string `json:"message"`
 	}
 
 	response := Response {
-		Message: "\nHello World!!\n",
+		Message: "Hello World!!",
 	}
 
-	json, _ := json.Marshal(response)
+	jsonData, _ := json.Marshal(response)
+	jsonFormedData := new(bytes.Buffer)
+	json.Indent(jsonFormedData, jsonData, "", "    ")	
 
 	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(json)
+	fmt.Fprint(w, jsonFormedData.String())
 
 }
 
