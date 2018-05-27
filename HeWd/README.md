@@ -5,12 +5,9 @@ JSON API on Docker
 Docker上でGo言語を用いてJSON APIを作成しました。  
 JSON形式で"Hello World!!"を返します。
 
-動作確認用公開URL  
-[http://dev.komventure.net:8080](http://dev.komventure.net:8080)
-
 ディレクトリ構成
 <pre>
-docker_webapp/
+HeWd/
 ├─ README.md
 ├─ docker-compose.yml
 └─ webapp/
