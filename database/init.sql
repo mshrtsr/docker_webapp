@@ -3,11 +3,11 @@ CREATE DATABASE mydb;
 \connect mydb;
 
 CREATE TABLE users (
-  id	integer,
-  name	text,
-  email	text,
-  created_at	timestamptz,
-  updated_at	timestamptz
+  id	SERIAL,
+  name	text	NOT NULL,
+  email	text	NOT NULL,
+  created_at	timestamptz	NOT NULL,
+  updated_at	timestamptz	NOT NULL
 );
 
 
