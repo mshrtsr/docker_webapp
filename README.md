@@ -3,16 +3,22 @@ JSON API on Docker
 
 ## Description
 Docker上でGo言語を用いてJSON APIを作成しました。  
-JSON形式で"Hello World!!"を返します。
+Postgresと連結して名前とメールアドレスを管理します。
 
 ディレクトリ構成
 <pre>
 HeWd/
 ├─ README.md
-├─ docker-compose.yml
-└─ webapp/
-    ├─ Dockerfile
-    └─ webapp.go
+├─ docker-compose.yml   # docker-compose設定ファイル
+├─ webapp/              # WebAPIコンテナ
+│  ├─ Dockerfile
+│  ├─ webapp.go
+│  └─ CRUD/             # PostgresのCRUD操作用Go言語パッケージ
+│      └─ CRUD.go
+├─ database/            # Postgresコンテナ
+│  ├─ Dockerfile
+│  └─ init.sql
+└─ test/                # テストコード
 </pre>
 
 ## Requirement
@@ -21,8 +27,9 @@ HeWd/
 docker  
 docker-compose
 
-＃依存コンテナ
+#依存コンテナ
 golang:latest
+postgres:latest
 </pre>
 
 ## Usage
@@ -35,9 +42,9 @@ $ docker-compose up -d
 $ docker-compose down
 </pre>
 
-クライアント側
+#### Hello World!!
+httpリクエスト
 <pre>
-#httpリクエスト
 $ curl -XGET -H 'Content-Type:application/json' http://localhost:8080/
 </pre>
 
@@ -46,4 +53,88 @@ $ curl -XGET -H 'Content-Type:application/json' http://localhost:8080/
 {
     "message": "Hello World!!"
 }
+</pre>
+
+#### Create
+httpリクエスト
+<pre>
+$ curl -XPOST -H 'Content-Type:application/json' http://localhost:8080/users -d '{"name": "test", "email": "hoge@example.com" }'
+</pre>
+
+レスポンス(HTTP ステータスコード 200)
+<pre>
+{
+    "id": 1,
+    "name": "test",
+    "email": "hoge@example.com",
+    "created_at": "2018-05-27T23:30:46.061325+09:00",
+    "updated_at": "2018-05-27T23:30:46.061325+09:00"
+}
+</pre>
+
+#### Update
+httpリクエスト
+<pre>
+$ curl -XPUT -H 'Content-Type:application/json' http://localhost:8080/users/1 -d '{"name": "koudaiii", "email": "hoge@example.com" }'
+</pre>
+
+レスポンス(HTTP ステータスコード 200)
+<pre>
+{
+    "id": 1,
+    "name": "koudaiii",
+    "email": "hoge@example.com",
+    "created_at": "2018-05-27T23:30:46.061325+09:00",
+    "updated_at": "2018-05-27T23:31:14.140414+09:00"
+}
+</pre>
+
+
+#### Read
+httpリクエスト
+<pre>
+$ curl -XGET -H 'Content-Type:application/json' http://localhost:8080/users/1
+</pre>
+
+レスポンス(HTTP ステータスコード 200)
+<pre>
+{
+    "id": 1,
+    "name": "koudaiii",
+    "email": "hoge@example.com",
+    "created_at": "2018-05-27T23:30:46.061325+09:00",
+    "updated_at": "2018-05-27T23:31:14.140414+09:00"
+}
+</pre>
+
+
+#### Read (All)
+httpリクエスト
+<pre>
+$ curl -XGET -H 'Content-Type:application/json' http://localhost:8080/users
+</pre>
+
+レスポンス(HTTP ステータスコード 200)
+<pre>
+[
+    {
+        "id": 1,
+        "name": "koudaiii",
+        "email": "hoge@example.com",
+        "created_at": "2018-05-27T23:30:46.061325+09:00",
+        "updated_at": "2018-05-27T23:31:14.140414+09:00"
+    }
+]
+</pre>
+
+
+#### Delete
+httpリクエスト
+<pre>
+$ curl -XDELETE -H 'Content-Type:application/json' http://localhost:8080/users/1
+</pre>
+
+レスポンス(HTTP ステータスコード 200)
+<pre>
+
 </pre>
