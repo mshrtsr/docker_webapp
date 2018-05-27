@@ -18,7 +18,8 @@ HeWd/
 ├─ database/            # Postgresコンテナ
 │  ├─ Dockerfile
 │  └─ init.sql
-└─ test/                # テストコード
+├─ test/                # テストコード
+└─ HeWd/                # （課題1,2）Hello Worldを出力するWebAPI
 </pre>
 
 ## Requirement
