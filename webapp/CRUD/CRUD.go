@@ -4,18 +4,19 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"os"
 	"time"
 )
 
-const (
-	db_HOST     = "database"
-	db_DATABASE = "mydb"
-	db_USER     = "postgres"
-	db_PASSWORD = "password"
-	db_SSLMODE  = "disable"
+var (
+	db_HOST     = os.Getenv("DB_HOSTNAME")
+	db_DATABASE = os.Getenv("DB_DATABASE")
+	db_USER     = os.Getenv("DB_USER")
+	db_PASSWORD = os.Getenv("DB_PASSWORD")
+	db_SSLMODE  = os.Getenv("DB_SSLMODE")
 )
 
-const db_TABLE = `(
+const db_TABLE_FMT = `(
   id	SERIAL PRIMARY KEY,
   name	text	NOT NULL,
   email	text	NOT NULL,
@@ -92,7 +93,7 @@ func CreateTable(tb_name string) {
 	defer db.Close()
 
 	// Create table.
-	sql_statement := fmt.Sprintf("CREATE TABLE %s %s;", tb_name, db_TABLE)
+	sql_statement := fmt.Sprintf("CREATE TABLE %s %s;", tb_name, db_TABLE_FMT)
 	_, err = db.Exec(sql_statement)
 	checkError(err)
 	fmt.Println("Finished creating table")

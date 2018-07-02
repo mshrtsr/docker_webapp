@@ -3,15 +3,22 @@ services:
   webapp:
     build: ./webapp
     ports:
-      - "8080:8080"
+      - $PORT:$PORT
     depends_on:
       - "database"
+    environment:
+      - DB_HOSTNAME=$DB_HOSTNAME
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_DATABASE=$DB_DATABASE
+      - DB_TABLE=$DB_TABLE
+      - DB_SSLMODE=$DB_SSLMODE
 
   database:
-    build: ./database
+    image: postgres:alpine
     ports:
-      - "5432:5432"
+      - $DBPORT:$DBPORT
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=password"
-
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_DATABASE

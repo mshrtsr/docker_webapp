@@ -7,12 +7,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-const tb_name = "userdb"
+var tb_name = os.Getenv("DB_TABLE")
+
 const contentType = "application/json"
 
 type Msg struct {
