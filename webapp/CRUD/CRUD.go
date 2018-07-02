@@ -48,12 +48,12 @@ func connectDB() (*sql.DB, error) {
 
 	err = db.Ping()
 	checkError(err)
-	fmt.Println("Successfully created connection to database")
+	//fmt.Println("Successfully created connection to database")
 
 	sql_statement := fmt.Sprintf("SET TIMEZONE TO 'Japan';")
 	_, err = db.Exec(sql_statement)
 	checkError(err)
-	fmt.Println("Finished setting timezone to Japan")
+	//fmt.Println("Finished setting timezone to Japan")
 
 	return db, err
 }
@@ -115,7 +115,7 @@ func CreateData(name string, email string, tb_name string) User {
 		case sql.ErrNoRows:
 			fmt.Println("No rows were returned")
 		case nil:
-			fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
+			//fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
 		default:
 			checkError(err)
 		}
@@ -141,7 +141,7 @@ func ReadData(id int, tb_name string) User {
 		case sql.ErrNoRows:
 			fmt.Println("No rows were returned")
 		case nil:
-			fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
+			//fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
 		default:
 			checkError(err)
 		}
@@ -168,7 +168,7 @@ func ReadDataAll(tb_name string) []User {
 		case sql.ErrNoRows:
 			fmt.Println("No rows were returned")
 		case nil:
-			fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
+			//fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
 		default:
 			checkError(err)
 		}
@@ -194,7 +194,7 @@ func UpdateData(id int, name string, email string, tb_name string) User {
 		case sql.ErrNoRows:
 			fmt.Println("No rows were returned")
 		case nil:
-			fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
+			//fmt.Printf("Data row = (%d, %s, %s, %d, %d)\n", user.Id, user.Name, user.Email, user.Created_at, user.Updated_at)
 		default:
 			checkError(err)
 		}
