@@ -3,7 +3,7 @@ JSON API on Docker
 
 ## Description
 Docker上でGo言語を用いてJSON APIを作成しました。  
-Postgresと連結して名前とメールアドレスを管理します。
+Postgresと連結して名前とメールアドレスを管理します。  
 **[Review](/Review.txt)を元に改善を行いました**
 
 ディレクトリ構成
