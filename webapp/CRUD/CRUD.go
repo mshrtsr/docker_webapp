@@ -1,18 +1,18 @@
 package CRUD
 
 import (
-	_ "github.com/lib/pq"
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"time"
 )
 
 const (
-	db_HOST	= "database"
+	db_HOST     = "database"
 	db_DATABASE = "mydb"
-	db_USER	= "postgres"
+	db_USER     = "postgres"
 	db_PASSWORD = "password"
-	db_SSLMODE = "disable"
+	db_SSLMODE  = "disable"
 )
 
 const db_TABLE = `(
@@ -24,11 +24,11 @@ const db_TABLE = `(
 )`
 
 type User struct {
-	Id	int
-  Name	string
-  Email	string
-  Created_at	time.Time
-  Updated_at	time.Time
+	Id         int
+	Name       string
+	Email      string
+	Created_at time.Time
+	Updated_at time.Time
 }
 
 func checkError(err error) {
@@ -55,7 +55,7 @@ func connectDB() (*sql.DB, error) {
 	checkError(err)
 	fmt.Println("Finished setting timezone to Japan")
 
-	return db,err
+	return db, err
 }
 
 func WaitDB() {
@@ -64,10 +64,10 @@ func WaitDB() {
 	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s", db_HOST, db_USER, db_PASSWORD, db_DATABASE, db_SSLMODE)
 
 	// Initialize connection object.
-	for{
+	for {
 		db, err := sql.Open("postgres", connectionString)
 		err = db.Ping()
-		if err == nil{
+		if err == nil {
 			break
 		}
 	}
@@ -76,7 +76,7 @@ func WaitDB() {
 
 func DropTable(tb_name string) {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Drop previous table of same name if one exists.
@@ -88,7 +88,7 @@ func DropTable(tb_name string) {
 
 func CreateTable(tb_name string) {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Create table.
@@ -98,9 +98,9 @@ func CreateTable(tb_name string) {
 	fmt.Println("Finished creating table")
 }
 
-func CreateData(name string, email string, tb_name string) (User){
+func CreateData(name string, email string, tb_name string) User {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Insert some data into table.
@@ -124,9 +124,9 @@ func CreateData(name string, email string, tb_name string) (User){
 
 }
 
-func ReadData(id int, tb_name string) (User) {
+func ReadData(id int, tb_name string) User {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Read rows from table.
@@ -150,13 +150,13 @@ func ReadData(id int, tb_name string) (User) {
 }
 
 //I wanna use overload
-func ReadDataAll(tb_name string)  ([]User) {
+func ReadDataAll(tb_name string) []User {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
-  // Read rows from table.
-	var users []User//= make([]User, 1)
+	// Read rows from table.
+	var users []User //= make([]User, 1)
 
 	sql_statement := fmt.Sprintf("SELECT * from %s;", tb_name)
 	rows, err := db.Query(sql_statement)
@@ -177,9 +177,9 @@ func ReadDataAll(tb_name string)  ([]User) {
 	return users
 }
 
-func UpdateData(id int, name string, email string, tb_name string) (User){
+func UpdateData(id int, name string, email string, tb_name string) User {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Modify some data in table.
@@ -205,7 +205,7 @@ func UpdateData(id int, name string, email string, tb_name string) (User){
 
 func DeleteData(id int, tb_name string) {
 
-	db,err := connectDB()
+	db, err := connectDB()
 	defer db.Close()
 
 	// Delete some data from table.

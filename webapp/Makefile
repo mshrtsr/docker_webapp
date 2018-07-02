@@ -3,17 +3,19 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
+GOFMT=$(GOCMD) fmt
 BINARY_NAME=webapp
 GOLIB=\
 	./CRUD/CRUD.go\
 
 BINARY_LINUX=$(BINARY_NAME)_linux_amd64
 
-.PHONY: all build clean run build-linux
+.PHONY: all build clean run build-linux format
 
-all: $(BINARY_NAME) $(BINARY_LINUX)
-build $(BINARY_NAME): $(BINARY_NAME).go $(GOLIB)
-	$(GOBUILD) -o $(BINARY_NAME) $(BINARY_NAME).go
+all: build build-linux
+build : $(BINARY_NAME)
+
+build-linux : $(BINARY_LINUX)
 
 clean:
 	$(GOCLEAN)
@@ -23,5 +25,12 @@ clean:
 run: $(BINARY_NAME)
 	./$(BINARY_NAME)
 
-build-linux $(BINARY_LINUX): $(BINARY_NAME).go $(GOLIB)
+format: $(BINARY_NAME).go $(GOLIB)
+	$(GOFMT) $(BINARY_NAME).go
+	$(GOFMT) $(GOLIB)
+
+$(BINARY_NAME): $(BINARY_NAME).go $(GOLIB)
+	$(GOBUILD) -o $(BINARY_NAME) $(BINARY_NAME).go
+
+$(BINARY_LINUX): $(BINARY_NAME).go $(GOLIB)
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_LINUX) $(BINARY_NAME).go

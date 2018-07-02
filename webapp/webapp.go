@@ -1,15 +1,15 @@
 package main
 
 import (
-	"bytes"
-	"net/http"
-	"encoding/json"
-	"log"
-	"fmt"
-	"strings"
-	"strconv"
-	"time"
 	"./CRUD"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 )
 
 const tb_name = "userdb"
@@ -20,19 +20,19 @@ type Msg struct {
 }
 
 type Request struct {
-	Name	string	`json:"name"`
-	Email	string	`json:"email"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 type Response struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Email string `json:"email"`
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
 	Created_at string `json:"created_at"`
 	Updated_at string `json:"updated_at"`
 }
 
-func message2json (str string) ([]byte){
+func message2json(str string) []byte {
 	var msg = Msg{
 		Message: str,
 	}
@@ -41,11 +41,11 @@ func message2json (str string) ([]byte){
 	return jsonData
 }
 
-func user2json (user CRUD.User) ([]byte){
-	var response = Response {
-		Id: user.Id,
-		Name: user.Name,
-		Email: user.Email,
+func user2json(user CRUD.User) []byte {
+	var response = Response{
+		Id:         user.Id,
+		Name:       user.Name,
+		Email:      user.Email,
 		Created_at: user.Created_at.Format(time.RFC3339Nano),
 		Updated_at: user.Updated_at.Format(time.RFC3339Nano),
 	}
@@ -54,13 +54,13 @@ func user2json (user CRUD.User) ([]byte){
 	return jsonData
 }
 
-func users2json (users []CRUD.User) ([]byte){
+func users2json(users []CRUD.User) []byte {
 	var response []Response
 	for i := range users {
-		response = append(response, Response {
-			Id: users[i].Id,
-			Name: users[i].Name,
-			Email: users[i].Email,
+		response = append(response, Response{
+			Id:         users[i].Id,
+			Name:       users[i].Name,
+			Email:      users[i].Email,
 			Created_at: users[i].Created_at.Format(time.RFC3339Nano),
 			Updated_at: users[i].Updated_at.Format(time.RFC3339Nano),
 		})
@@ -70,15 +70,15 @@ func users2json (users []CRUD.User) ([]byte){
 	return jsonData
 }
 
-func handler(w http.ResponseWriter, r *http.Request){
+func handler(w http.ResponseWriter, r *http.Request) {
 
-// Check Content-Type
+	// Check Content-Type
 	if r.Header.Get("Content-Type") != contentType {
 		w.WriteHeader(404)
 		return
 	}
 
-// Parse URL
+	// Parse URL
 	var isState_users bool = false
 	var isState_id bool = false
 	var id int
@@ -86,9 +86,9 @@ func handler(w http.ResponseWriter, r *http.Request){
 	slicedPath := strings.Split(r.URL.Path, "/")
 	if len(slicedPath) >= 2 {
 		switch slicedPath[1] {
-			case "users":
-				isState_users = true
-			default:
+		case "users":
+			isState_users = true
+		default:
 		}
 	}
 	if len(slicedPath) == 3 {
@@ -98,7 +98,7 @@ func handler(w http.ResponseWriter, r *http.Request){
 		}
 	}
 
-// Docode json input data
+	// Docode json input data
 	var rtn int64
 	var requests Request
 
@@ -110,12 +110,12 @@ func handler(w http.ResponseWriter, r *http.Request){
 		if err := json.Unmarshal(body, &requests); err != nil {
 			log.Fatal(err)
 		}
- 	}
+	}
 
 	name := requests.Name
 	email := requests.Email
 
-// CRUD
+	// CRUD
 	var user CRUD.User
 	var users []CRUD.User
 	var jsonData []byte
@@ -126,7 +126,7 @@ func handler(w http.ResponseWriter, r *http.Request){
 		switch {
 		case isState_id:
 			fmt.Println("Read")
-			user = CRUD.ReadData(id,tb_name)
+			user = CRUD.ReadData(id, tb_name)
 			jsonData = user2json(user)
 			w.WriteHeader(200)
 		case isState_users:
@@ -187,12 +187,12 @@ func handler(w http.ResponseWriter, r *http.Request){
 
 }
 
-func main(){
+func main() {
 	CRUD.WaitDB()
 	CRUD.DropTable(tb_name)
 	CRUD.CreateTable(tb_name)
 	http.HandleFunc("/", handler)
-	if err := http.ListenAndServe(":8080",nil); err != nil {
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
 }
