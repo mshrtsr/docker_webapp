@@ -1,12 +1,4 @@
-FROM golang:latest
+FROM alpine:latest
 
-WORKDIR /go
-ADD . /go
-
-RUN mkdir  %USERPROFILE%\go\src\postgresqlgo
-RUN cd %USERPROFILE%\go\src\postgresqlgo
-RUN set GOPATH=%USERPROFILE%\go
-RUN go get github.com/lib/pq
-
-CMD ["go", "run", "wait_for_postgres.go"]
-CMD ["go", "run", "webapp.go"]
+COPY ./webapp_linux_amd64 ./
+CMD ["./webapp_linux_amd64"]
