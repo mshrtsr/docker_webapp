@@ -4,6 +4,7 @@ JSON API on Docker
 ## Description
 Docker上でGo言語を用いてJSON APIを作成しました。  
 Postgresと連結して名前とメールアドレスを管理します。
+**[Review](/Review.txt)を元に改善を行いました**
 
 ディレクトリ構成
 <pre>
@@ -15,9 +16,6 @@ HeWd/
 │  ├─ webapp.go
 │  └─ CRUD/             # PostgresのCRUD操作用Go言語パッケージ
 │      └─ CRUD.go
-├─ database/            # Postgresコンテナ
-│  ├─ Dockerfile
-│  └─ init.sql
 ├─ test/                # テストコード
 └─ HeWd/                # （課題1,2）Hello Worldを出力するWebAPI
 </pre>
@@ -29,18 +27,21 @@ docker
 docker-compose
 
 #依存コンテナ
-golang:latest
-postgres:latest
+alpine:latest
+postgres:alpine
 </pre>
 
 ## Usage
 サーバー側
 <pre>
+#ビルド
+$ make
+
 #コンテナ起動
-$ docker-compose up -d
+$ make docker-up
 
 #コンテナ終了
-$ docker-compose down
+$ make docker-down
 </pre>
 
 #### Hello World!!
