@@ -1,6 +1,7 @@
 version: '3'
 services:
   webapp:
+    image: json_api
     build: ./webapp
     ports:
       - $PORT:$PORT
