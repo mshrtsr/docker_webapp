@@ -1,4 +1,9 @@
-FROM golang:latest as builder
+FROM golang:alpine as builder
+
+RUN apk add -U --no-cache \
+  git \
+  make \
+  && rm -rf /var/cache/apk/*
 
 RUN mkdir  %USERPROFILE%\go\src\postgresqlgo
 RUN cd %USERPROFILE%\go\src\postgresqlgo
